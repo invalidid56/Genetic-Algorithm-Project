@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 import random #@UnresolvedImport
 
 def maxf(olist, func):
@@ -16,17 +17,15 @@ def minf(olist, func):
 
 
 class Generation():
-    def __str__(self, k):
-        return str(self.Generation[0])
-    def choice_R(self, k): #Ç°Áú ºñ·Ê ·ê·¿ÈÙ         
+
+    def choice_R(self, k): #Ç°ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ê·¿ï¿½ï¿½         
         pass
-    
-    def choice_T(self, k): #Åä³Ê¸ÕÆ® 0<k<100 k°ª - ¼±ÅÃ¾Ð
+    def choice_T(self, k): #ï¿½ï¿½Ê¸ï¿½Æ® 0<k<100 kï¿½ï¿½ - ï¿½ï¿½ï¿½Ã¾ï¿½
         for c in range(2) :
             chrom_rec = random.choice(self.Generation)
             chrom_dom = random.choice(self.Generation)
             if self.func(chrom_dom)<self.func(chrom_rec):chrom_dom, chrom_rec = chrom_rec, chrom_dom        
-            p = random.randint(100)
+            p = random.randint(0, 100)
             if c == 1:
                 if p<k : a = chrom_dom 
                 else : a = chrom_rec
@@ -34,18 +33,17 @@ class Generation():
                 if p<k : b = chrom_dom 
                 else : b = chrom_rec
         return a, b          
-    def cross_U(self, k, dad, mom): #±Õµî ±³Â÷(k = ¼±ÅÃ¾Ð)
+    def cross_U(self, t, dad, mom): #ï¿½Õµï¿½ ï¿½ï¿½ï¿½ï¿½(k = ï¿½ï¿½ï¿½Ã¾ï¿½)
         result = []
         for i in range(len(dad)):
-            p = random.randint(100)
-            if p<k : result.append(dad[i])
+            p = random.randint(0, 100)
+            if p<t : result.append(dad[i])
             else : result.append(mom[i])
         return result                
-    def cross_P(self, p, dad, mom): #ÀÏÁ¡ ±³Â÷
+    def cross_P(self, t, dad, mom): #ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         pass    
-    def mutant(self, k): #ºñ±Õµî º¯ÀÌ(k = º¯ÀÌ È®·ü)
-        pass
-    
+    def mutant(self, k): #ï¿½ï¿½Õµï¿½ ï¿½ï¿½ï¿½ï¿½(k = ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½)
+        pass  
     def __init__(self, GeneList, choice, crossover, mutantChance, mutMax, mutMin, func):
         self.Generation = GeneList
         self.count = 1
@@ -54,24 +52,24 @@ class Generation():
         self.cross = crossover
         self.func = func
         self.mutchance = mutantChance        
-    def evol(self, k):
-        self.Generation = self.offspring(k)
-        self.Generation = self.mutant(self.mutchance)
-        mxa = self.func(Generation[0])
+    def evol(self, k, t):
+        self.Generation = self.offspring(k, t)
+        #self.Generation = self.mutant(self.mutchance)
+        mxa = self.func(self.Generation[0])
         for i in range(self.len) :
             if mxa < self.func(self.Generation[i]) :
-                self.Generation.insert(0, self.Generation[i].pop)                     
-    def offspring(self, k):
+                self.Generation.insert(0, self.Generation.pop(i))
+        return self.Generation
+    def offspring(self, k, t):
         result = []
         
         for _ in range(self.len):
             if self.choice == 1 : parents = self.choice_R(k)
             elif self.choice == 2 : parents = self.choice_T(k)
             dad, mom = parents
-            #¼±ÅÃ¿¬»êÀ¸·Î µÎ ºÎ¸ð¸¦ Ãß¸®±â
+            #ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Î¸ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½
             
-            if self.cross == 1 : son = self.cross_U(k, dad, mom)
-            elif self.cross == 2 :  son = self.cross_P(k, dad, mom)
+            if self.cross == 1 : son = self.cross_U(t, dad, mom)
+            elif self.cross == 2 :  son = self.cross_P(t, dad, mom)
             result.append(son)
-            
         return result
