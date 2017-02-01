@@ -11,8 +11,10 @@ def func(l):
         if olist[i] == l[i]:
             f+=1
     return f
-
-Gen = pyGene.Generation(gen, 2, 1, 0, 1, 0, func)
+#def __init__(self, GeneList, choice, crossover, mutantChance, mutMax, mutMin, func, MaxGeneration):
+Gen = pyGene.Generation(gen, 2, 1, 0, 1, 0, func, 100)
     
-for _ in range(1000):
-    print(Gen.evol(50, 50))
+for i in range(100):
+    g = Gen.evol(50, 50, i)[0]
+    print(g)
+    if g == 5 : break

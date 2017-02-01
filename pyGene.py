@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 import random #@UnresolvedImport
+import math
 
 def maxf(olist, func):
     l = len(olist)
@@ -42,19 +43,32 @@ class Generation():
         return result                
     def cross_P(self, t, dad, mom): #���� ����
         pass    
-    def mutant(self, k): #��յ� ����(k = ���� Ȯ��)
-        pass  
-    def __init__(self, GeneList, choice, crossover, mutantChance, mutMax, mutMin, func):
+    def mutant(self,k, g): #��յ� ����(k = ���� Ȯ��)
+        result = [ [0]*5 for _ in range(10) ]
+        d = lambda t, y: y*(1-r*((t+1)/self.Mg))
+        for h in range(self.hei):
+            for w in range(self.wid):
+                r = random.randint(0,1) #변이 할거야 안할거야
+                s = random.randint(0,1) #더하겠쏘!! 뺴겠쏘!!
+                if s==0 : result[h][w] = self.Generation[h][w]+math.floor(d(g, self.mutMax-self.Generation[h][w]))
+                elif s==1 : result[h][w] = self.Generation[h][w]-math.floor(d(g, self.Generation[h][w]-self.mutMin))
+        return result
+    def __init__(self, GeneList, choice, crossover, mutantChance, mutMax, mutMin, func, MaxGeneration):
         self.Generation = GeneList
         self.count = 1
         self.len = len(self.Generation)
         self.choice = choice
         self.cross = crossover
         self.func = func
-        self.mutchance = mutantChance        
-    def evol(self, k, t):
+        self.mutchance = mutantChance   
+        self.Mg = MaxGeneration  
+        self.wid = len(self.Generation[0])
+        self.hei = len(self.Generation)  
+        self.mutMax = mutMax
+        self.mutMin = mutMin 
+    def evol(self, k, t, g):
         self.Generation = self.offspring(k, t)
-        #self.Generation = self.mutant(self.mutchance)
+        self.Generation = self.mutant(self.mutchance, g)
         mxa = self.func(self.Generation[0])
         for i in range(self.len) :
             if mxa < self.func(self.Generation[i]) :
