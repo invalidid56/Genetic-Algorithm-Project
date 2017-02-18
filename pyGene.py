@@ -3,22 +3,6 @@ import random #@UnresolvedImport
 import math
 
 
-def maxf(olist, func):
-    l = len(olist)
-    m = func(olist[0])
-    for i in range(l):
-        if m<=func(olist[i]):
-            olist.insert(0, olist[i].pop)
-
-
-def minf(olist, func):
-    l = len(olist)
-    m = func(olist[0])
-    for i in range(l):
-        if m >= func(olist[i]):
-            olist.insert(0, olist[i].pop)
-
-
 def pick(a, b, p):
     l = []
     for _ in range(p):
@@ -59,6 +43,13 @@ class Generation:
 
     def cross_p(self, t, dad, mom):
         pass
+
+    def cross_o(self, p, q, dad, mom):  #순서 교차 연산(p>q)
+        result=[]
+        for j in range(p-q):result.append(dad.pop(p+j))
+        for j in range(len(mom)):
+            if __eq__(0, result.count(mom[j])):result.append(mom[j])
+        return result
 
     def mutant(self, g):
         result = [[0]*self.wid for _ in range(self.hei)]
